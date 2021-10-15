@@ -12,7 +12,7 @@ app.use(express.static("public"));
 
 //set server && routes
 app.get('/', (req, res) => {
-    res.render(__dirname + '/views/home.ejs');
+    res.render('home');
 });
 
 app.listen(port, () => {
