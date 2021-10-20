@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const app = express();
 const port = 3000;
+//require lodash to have a string for the url 
+const _ = require('lodash');
 
 app.set('view engine', 'ejs');
 
@@ -18,9 +20,10 @@ const posts = [];
 
 //set server && routes
 app.get('/', (req, res) => {
-    res.render('home', {startingContent: homeStartingContent,
-    posts: posts
-});
+    res.render('home', {
+        startingContent: homeStartingContent,
+        posts: posts
+    });
     
 });
 
@@ -47,28 +50,36 @@ app.post('/compose', (req, res) => {
     res.redirect('/');
 });
 
-app.get('/posts/:postTitle', (req, res) => {
-    const requestTitle = req.params.postTitle;
-
-    posts.forEach(function(post) {
-        if (post.title.includes(requestTitle)) {
-            console.log('Match found');
-        }
-    })
-    });
-
-/* Another way of setting the route:
-
 app.get("/posts/:postTitle", (req, res) => {
-    const requestTitle = req.params.postTitle;
+    
+    const requestTitle = _.lowerCase(req.params.postTitle);
 
     posts.forEach(function(post) {
-        const storedTitle = post.title;
+        const storedTitle = _.lowerCase(post.title);
+       
         if(storedTitle === requestTitle) {
-            console.log('Match found);
+            res.render('post', { //name of the page (post.ejs)
+                title: post.title,
+                body: post.text //named text to the body above
+            });
         }
     });
 });
+
+
+/* Another way of setting the route:
+
+app.get('/posts/:postTitle', (req, res) => {
+    const requestTitle = _.lowerCase(req.params.postTitle);
+ 
+    posts.forEach(function(post) {
+        if (post.title.includes(requestTitle)) {
+            console.log('Match found');
+        } else {
+            console.log('Not A Match');
+        }
+    })
+    });
 */
 
 app.listen(port, () => {
