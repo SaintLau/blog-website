@@ -47,6 +47,30 @@ app.post('/compose', (req, res) => {
     res.redirect('/');
 });
 
+app.get('/posts/:postTitle', (req, res) => {
+    const requestTitle = req.params.postTitle;
+
+    posts.forEach(function(post) {
+        if (post.title.includes(requestTitle)) {
+            console.log('Match found');
+        }
+    })
+    });
+
+/* Another way of setting the route:
+
+app.get("/posts/:postTitle", (req, res) => {
+    const requestTitle = req.params.postTitle;
+
+    posts.forEach(function(post) {
+        const storedTitle = post.title;
+        if(storedTitle === requestTitle) {
+            console.log('Match found);
+        }
+    });
+});
+*/
+
 app.listen(port, () => {
     console.log(`App listening at ${3000}`);
 });
